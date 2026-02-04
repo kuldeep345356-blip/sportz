@@ -27,7 +27,12 @@ export function attachWebSocketServer(server){
 
    const interval = setInterval(()=>{
        wss.clients.forEach((ws)=>{
-           if(ws.isAlive === false) return ws.terminate();
+           if(ws.isAlive === false){
+               if(ws.isAlive === false) {
+                   ws.terminate();
+                   return;
+               }
+           }
            ws.isAlive = false;
            ws.ping();
        });
@@ -38,4 +43,6 @@ export function attachWebSocketServer(server){
    function broadcastMatchCreated(match){
        broadcast(wss,{type:'match created',data:match});
    }
+
+   return {broadcastMatchCreated, wss};
 }
